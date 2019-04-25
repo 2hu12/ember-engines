@@ -3,6 +3,7 @@ import { getOwner } from '@ember/application';
 import { set, get } from '@ember/object';
 import { typeOf } from '@ember/utils';
 import { assert } from '@ember/debug';
+import { FEATURES } from '@ember/canary-features';
 
 export default LinkComponent.extend({
   didReceiveAttrs() {
@@ -16,8 +17,11 @@ export default LinkComponent.extend({
     );
 
     if (owner.mountPoint) {
+      const routePropertyName = FEATURES.EMBER_GLIMMER_ANGLE_BRACKET_BUILT_INS
+        ? 'route'
+        : 'targetRouteName';
       // Prepend engine mount point to targetRouteName
-      this._prefixProperty(owner.mountPoint, 'targetRouteName');
+      this._prefixProperty(owner.mountPoint, routePropertyName);
 
       // Prepend engine mount point to current-when if set
       if (get(this, 'current-when') !== null) {
